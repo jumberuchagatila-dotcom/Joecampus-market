@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mfumo wa Shule</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #667eea;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            width: auto;
+            padding: 10px 15px;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background: white;
+            transition: 0.3s;
+            z-index: 1000;
+            padding: 20px;
+        }
+        .side-menu.active {
+            right: 0;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            z-index: 999;
+        }
+        .overlay.active {
+            display: block;
+        }
+        .side-menu a {
+            display: block;
+            padding: 15px;
+            text-decoration: none;
+            color: #333;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .dashboard {
+            max-width: 1200px;
+            margin: 80px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+        }
+        .grade-A { background: #d4edda; }
+        .grade-B { background: #d1ecf1; }
+        .grade-C { background: #fff3cd; }
+        .grade-D { background: #f8d7da; }
+        .grade-E { background: #f8d7da; }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+<div class="side-menu" id="sideMenu">
+    <h3>Menu</h3>
+    <a onclick="closeMenu()">Nyumbani</a>
+    <a id="helpMenuBtn">Help</a>
+    <a id="aboutMenuBtn">About Us</a>
+    <a onclick="logout()">Toka</a>
+</div>
+
+<div id="loginContainer" class="container">
+    <button class="menu-btn" id="menuBtn">☰ Menu</button>
+    <h1>🏫 Mfumo wa Shule</h1>
+    <h2>Ingia Mfumo</h2>
+    <div id="loginMsg" class="message"></div>
+    <input type="email" id="loginEmail" placeholder="Barua pepe">
+    <input type="password" id="loginPassword" placeholder="Nenosiri">
+    <button onclick="login()">Ingia</button>
+    <p style="text-align:center; margin-top:15px;">
+        <a onclick="showRegister()" style="cursor:pointer; color:#667eea;">Jisajili</a>
+    </p>
+</div>
+
+<div id="registerContainer" class="container hidden">
+    <button class="menu-btn" id="menuBtn2">☰ Menu</button>
+    <h1>📝 Usajili wa Mwalimu</h1>
+    <div id="registerMsg" class="message"></div>
+    <input type="text" id="regName" placeholder="Jina Kamili">
+    <input type="email" id="regEmail" placeholder="Barua pepe">
+    <input type="password" id="regPassword" placeholder="Nenosiri">
+    <select id="regSubjects" multiple size="3">
+        <option>Mathematics</option>
+        <option>English</option>
+        <option>Kiswahili</option>
+        <option>Science</option>
+    </select>
+    <input type="number" id="regStudentCount" placeholder="Idadi ya Wanafunzi">
+    <div id="studentNamesArea"></div>
+    <button onclick="register()">Jisajili</button>
+    <p style="text-align:center; margin-top:15px;">
+        <a onclick="showLogin()" style="cursor:pointer; color:#667eea;">Rudi kwenye Kuingia</a>
+    </p>
+</div>
+
+<div id="dashboardContainer" class="dashboard hidden">
+    <button class="menu-btn" id="menuBtn3">☰ Menu</button>
+    <h1>📊 Dashboard ya Mwalimu</h1>
+    
+    <div style="display:flex; gap:15px; margin:20px 0;">
+        <div style="background:#f0f0f0; padding:15px; border-radius:10px; flex:1; text-align:center;">
+            <h3 id="totalStudents">0</h3>
+            <p>Wanafunzi</p>
+        </div>
+        <div style="background:#f0f0f0; padding:15px; border-radius:10px; flex:1; text-align:center;">
+            <h3 id="totalGrades">0</h3>
+            <p>Matokeo</p>
+        </div>
+    </div>
+    
+    <div style="background:#f9f9f9; padding:20px; border-radius:10px; margin-bottom:20px;">
+        <h3>➕ Weka Matokeo</h3>
+        <div id="gradeMsg" class="message"></div>
+        <input type="text" id="studentName" placeholder="Jina la Mwanafunzi">
+        <input type="text" id="subject" placeholder="Somo">
+        <input type="number" id="score" placeholder="Alama (1-50)" min="1" max="50">
+        <select id="term">
+            <option>Muhula 1</option>
+            <option>Muhula 2</option>
+            <option>Muhula 3</option>
+        </select>
+        <button onclick="addGrade()">Hifadhi Matokeo</button>
+    </div>
+    
+    <h3>📋 Matokeo Yote</h3>
+    <table id="gradesTable">
+        <thead>
+            <tr><th>Mwanafunzi</th><th>Somo</th><th>Alama</th><th>Daraja</th><th>Muhula</th></tr>
+        </thead>
+        <tbody id="gradesList">
+            <tr><td colspan="5" style="text-align:center;">Hakuna matokeo</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<script type="importmap">
+    {
+        "imports": {
+            "appwrite": "https://cdn.jsdelivr.net/npm/appwrite@10.0.0/+esm"
+        }
+    }
+</script>
+
+<script type="module">
+    import { Client, Account, Databases, ID, Query } from 'appwrite';
+
+    const client = new Client();
+    client.setEndpoint('https://cloud.appwrite.io/v1');
+    client.setProject('6a0aebe20009c9b90c23');
+    
+    const account = new Account(client);
+    const databases = new Databases(client);
+    
+    const DATABASE_ID = '6a0aeca0002ee00cd542';
+    const COLLECTION_GRADES = 'grades';
+    const COLLECTION_TEACHERS = 'teachers';
+    
+    let currentUser = null;
+    
+    function getGrade(score) {
+        if (score >= 41) return 'A';
+        if (score >= 31) return 'B';
+        if (score >= 21) return 'C';
+        if (score >= 11) return 'D';
+        return 'E';
+    }
+    
+    function showMessage(element, msg, type) {
+        const el = document.getElementById(element);
+        el.textContent = msg;
+        el.className = `message ${type}`;
+        setTimeout(() => {
+            el.className = 'message';
+        }, 3000);
+    }
+    
+    // UI Functions
+    window.showLogin = function() {
+        document.getElementById('loginContainer').classList.remove('hidden');
+        document.getElementById('registerContainer').classList.add('hidden');
+        document.getElementById('dashboardContainer').classList.add('hidden');
+    };
+    
+    window.showRegister = function() {
+        document.getElementById('loginContainer').classList.add('hidden');
+        document.getElementById('registerContainer').classList.remove('hidden');
+        document.getElementById('dashboardContainer').classList.add('hidden');
+    };
+    
+    window.showDashboard = function() {
+        document.getElementById('loginContainer').classList.add('hidden');
+        document.getElementById('registerContainer').classList.add('hidden');
+        document.getElementById('dashboardContainer').classList.remove('hidden');
+    };
+    
+    // Student names field
+    document.getElementById('regStudentCount')?.addEventListener('change', (e) => {
+        const count = parseInt(e.target.value);
+        const area = document.getElementById('studentNamesArea');
+        area.innerHTML = '';
+        if (count > 0 && count <= 50) {
+            area.innerHTML = '<h4>Majina ya Wanafunzi:</h4>';
+            for (let i = 1; i <= count; i++) {
+                area.innerHTML += `<input type="text" id="student_${i}" placeholder="Mwanafunzi ${i}">`;
+            }
+        }
+    });
+    
+    // REGISTER
+    window.register = async function() {
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const subjectsSelect = document.getElementById('regSubjects');
+        const subjects = Array.from(subjectsSelect.selectedOptions).map(o => o.value);
+        const studentCount = parseInt(document.getElementById('regStudentCount').value) || 0;
+        
+        if (!name || !email || !password) {
+            showMessage('registerMsg', 'Jaza sehemu zote!', 'error');
+            return;
+        }
+        
+        try {
+            const user = await account.create(ID.unique(), email, password, name);
+            await databases.createDocument(DATABASE_ID, COLLECTION_TEACHERS, ID.unique(), {
+                userId: user.$id,
+                fullName: name,
+                email: email,
+                subjects: subjects,
+                studentCount: studentCount,
+                registeredAt: new Date().toISOString(),
+                isActive: true
+            });
+            showMessage('registerMsg', 'Usajili umefanikiwa! Sasa ingia.', 'success');
+            setTimeout(() => showLogin(), 1500);
+        } catch (error) {
+            showMessage('registerMsg', 'Kosa: ' + error.message, 'error');
+        }
+    };
+    
+    // LOGIN
+    window.login = async function() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        
+        try {
+            await account.createSession(email, password);
+            currentUser = await account.get();
+            showMessage('loginMsg', 'Kuingia kumefanikiwa!', 'success');
+            await loadDashboardData();
+            showDashboard();
+        } catch (error) {
+            showMessage('loginMsg', 'Kosa: ' + error.message, 'error');
+        }
+    };
+    
+    // ADD GRADE
+    window.addGrade = async function() {
+        if (!currentUser) return;
+        
+        const studentName = document.getElementById('studentName').value;
+        const subject = document.getElementById('subject').value;
+        const score = parseInt(document.getElementById('score').value);
+        const term = document.getElementById('term').value;
+        
+        if (!studentName || !subject || !score || !term) {
+            showMessage('gradeMsg', 'Jaza sehemu zote!', 'error');
+            return;
+        }
+        
+        const grade = getGrade(score);
+        
+        try {
+            await databases.createDocument(DATABASE_ID, COLLECTION_GRADES, ID.unique(), {
+                teacherId: currentUser.$id,
+                studentId: 's_' + Date.now(),
+                studentName: studentName,
+                subject: subject,
+                score: score,
+                grade: grade,
+                term: term,
+                year: new Date().getFullYear(),
+                date: new Date().toISOString()
+            });
+            showMessage('gradeMsg', 'Matokeo yamehifadhiwa!', 'success');
+            document.getElementById('studentName').value = '';
+            document.getElementById('subject').value = '';
+            document.getElementById('score').value = '';
+            loadDashboardData();
+        } catch (error) {
+            showMessage('gradeMsg', 'Kosa: ' + error.message, 'error');
+        }
+    };
+    
+    async function loadDashboardData() {
+        if (!currentUser) return;
+        
+        try {
+            const grades = await databases.listDocuments(DATABASE_ID, COLLECTION_GRADES, [
+                Query.equal('teacherId', currentUser.$id)
+            ]);
+            
+            document.getElementById('totalGrades').textContent = grades.documents.length;
+            const students = [...new Set(grades.documents.map(g => g.studentName))];
+            document.getElementById('totalStudents').textContent = students.length;
+            
+            const tbody = document.getElementById('gradesList');
+            if (grades.documents.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5">Hakuna matokeo</td></tr>';
+            } else {
+                tbody.innerHTML = '';
+                grades.documents.forEach(doc => {
+                    const gradeClass = `grade-${doc.grade}`;
+                    tbody.innerHTML += `<tr class="${gradeClass}">
+                        <td>${doc.studentName}</td>
+                        <td>${doc.subject}</td>
+                        <td>${doc.score}</td>
+                        <td>${doc.grade}</td>
+                        <td>${doc.term}</td>
+                    </tr>`;
+                });
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    
+    // LOGOUT
+    window.logout = async function() {
+        try {
+            await account.deleteSession('current');
+            currentUser = null;
+            showLogin();
+            closeMenu();
+        } catch (error) {
+            showLogin();
+        }
+    };
+    
+    // MENU
+    function closeMenu() {
+        document.getElementById('sideMenu').classList.remove('active');
+        document.getElementById('overlay').classList.remove('active');
+    }
+    window.closeMenu = closeMenu;
+    
+    document.getElementById('menuBtn')?.addEventListener('click', () => {
+        document.getElementById('sideMenu').classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+    });
+    document.getElementById('menuBtn2')?.addEventListener('click', () => {
+        document.getElementById('sideMenu').classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+    });
+    document.getElementById('menuBtn3')?.addEventListener('click', () => {
+        document.getElementById('sideMenu').classList.add('active');
+        document.getElementById('overlay').classList.add('active');
+    });
+    document.getElementById('overlay')?.addEventListener('click', closeMenu);
+    
+    // Help & About
+    document.getElementById('helpMenuBtn')?.addEventListener('click', () => {
+        alert("📚 Msaada:\n\n41-50 = A\n31-40 = B\n21-30 = C\n11-20 = D\n1-10 = E\n\nWeka matokeo ya wanafunzi wako.");
+        closeMenu();
+    });
+    document.getElementById('aboutMenuBtn')?.addEventListener('click', () => {
+        alert("ℹ️ Mfumo wa Usimamizi wa Shule\nToleo: 2.0\n© 2024");
+        closeMenu();
+    });
+    
+    // Check session
+    async function checkSession() {
+        try {
+            currentUser = await account.get();
+            await loadDashboardData();
+            showDashboard();
+        } catch (error) {
+            showLogin();
+        }
+    }
+    
+    checkSession();
+</script>
+</body>
+</html>
