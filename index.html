@@ -6,6 +6,12 @@
 <meta name="theme-color" content="#0f172a">
 <meta name="description" content="JoeUnTracker - Fuatilia Biashara Yako Tanzania">
 <meta name="author" content="joeruchaga">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="JoeUnTracker">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text y='.9em' x='50' text-anchor='middle' font-size='80'>📊</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f172a'/><text y='.9em' x='50' text-anchor='middle' font-size='80'>📊</text></svg>">
 <title>JoeUnTracker</title>
 <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.1/dist/iife/sdk.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -13,23 +19,20 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,-apple-system,sans-serif}
 :root{--bg:#f1f5f9;--card:#fff;--text:#0f172a;--sub:#64748b;--green:#10b981;--red:#ef4444;--blue:#3b82f6;--orange:#f59e0b;--purple:#8b5cf6}
-body{background:var(--bg);color:var(--text);padding:20px 16px 30px;max-width:550px;margin:auto;min-height:100vh}
+body{background:var(--bg);color:var(--text);padding:16px;max-width:550px;margin:auto;min-height:100vh}
 .hdr{display:flex;justify-content:space-between;align-items:center;padding:8px 0 16px}
 .hdr-left{display:flex;align-items:center;gap:10px}
 .logo-icon{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#3b82f6,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff}
 .hdr h1{font-size:20px;font-weight:800;letter-spacing:-.5px}
-.menu-btn{width:40px;height:40px;border-radius:50%;background:#fff;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all .2s;position:relative}
+.menu-btn{width:40px;height:40px;border-radius:50%;background:#fff;border:2px solid #e2e8f0;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;transition:all .2s}
 .menu-btn:active{background:#f1f5f9;transform:scale(0.95)}
-/* Dropdown menu ndani ya dashboard */
 .dd-wrap{position:relative;display:inline-block}
 .dd-menu{position:absolute;top:48px;right:0;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.2);z-index:500;display:none;min-width:200px;overflow:hidden;border:1px solid #f1f5f9}
 .dd-menu.show{display:block;animation:dd .2s ease}
 @keyframes dd{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
 .dd-item{padding:13px 18px;cursor:pointer;font-size:13px;font-weight:500;display:flex;align-items:center;gap:10px;transition:all .15s;color:#334155;border-bottom:1px solid #f8fafc}
-.dd-item:last-child{border-bottom:none}
-.dd-item:active{background:#f8fafc}
-.dd-item .ic{font-size:17px}
-.dd-divider{height:1px;background:#f1f5f9;margin:4px 0}
+.dd-item:last-child{border-bottom:none}.dd-item:active{background:#f8fafc}
+.dd-item .ic{font-size:17px}.dd-divider{height:1px;background:#f1f5f9;margin:4px 0}
 .ntf{position:fixed;top:20px;right:16px;padding:12px 18px;border-radius:50px;color:#fff;font-size:13px;font-weight:600;z-index:600;display:none;animation:sl .4s ease;max-width:240px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.2)}
 .ntf.p{background:rgba(16,185,129,.95);display:block}.ntf.l{background:rgba(239,68,68,.95);display:block}
 @keyframes sl{from{transform:translateX(150px) scale(0.8);opacity:0}to{transform:translateX(0) scale(1);opacity:1}}
@@ -39,19 +42,18 @@ body{background:var(--bg);color:var(--text);padding:20px 16px 30px;max-width:550
 .st::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
 .st:nth-child(1)::before{background:#3b82f6}.st:nth-child(2)::before{background:#10b981}
 .st:nth-child(3)::before{background:#ef4444}.st:nth-child(4)::before{background:#f59e0b}
-.st:active{transform:scale(0.96)}
-.st .lbl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:1px;font-weight:600}
+.st:active{transform:scale(0.96)}.st .lbl{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:1px;font-weight:600}
 .st .v{font-size:17px;font-weight:800;margin-top:5px;letter-spacing:-.5px}
 .g{color:#10b981}.r{color:#ef4444}.b{color:#3b82f6}.o{color:#f59e0b}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .menu-item{background:var(--card);padding:16px 10px;border-radius:14px;text-align:center;cursor:pointer;transition:all .2s;border:1px solid #f8fafc;box-shadow:0 1px 3px rgba(0,0,0,.04)}
 .menu-item:active{transform:scale(0.95);background:#f8fafc}
-.menu-item .mi{font-size:28px;margin-bottom:6px}
-.menu-item .mt{font-size:11px;font-weight:600;color:var(--text)}
+.menu-item .mi{font-size:28px;margin-bottom:6px}.menu-item .mt{font-size:11px;font-weight:600;color:var(--text)}
 .btn{display:block;padding:13px 22px;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:13px;width:100%;margin:6px 0;text-align:center;transition:all .2s}
-.btn:active{transform:scale(0.97)}
-.bg{background:linear-gradient(135deg,#10b981,#059669);color:#fff}.bb{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff}
-.br{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}.bo{border:2px solid #e2e8f0;color:#334155;background:#fff}
+.btn:active{transform:scale(0.97)}.bg{background:linear-gradient(135deg,#10b981,#059669);color:#fff}
+.bb{background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff}
+.br{background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff}
+.bo{border:2px solid #e2e8f0;color:#334155;background:#fff}
 .btn-sm{width:auto;padding:8px 16px;font-size:11px;display:inline-block}
 input,select,textarea{width:100%;padding:13px 16px;border:2px solid #e8ecf1;border-radius:50px;margin:6px 0;font-size:14px;background:#f8fafc;outline:none;transition:all .2s}
 input:focus,select:focus,textarea:focus{border-color:#3b82f6;background:#fff;box-shadow:0 0 0 4px rgba(59,130,246,.08)}
@@ -64,8 +66,7 @@ textarea{resize:none;min-height:80px;border-radius:18px}
 .tgg{background:#ecfdf5;color:#059669}.tgr{background:#fef2f2;color:#dc2626}
 canvas{max-height:190px}
 .mod{display:none;position:fixed;inset:0;background:rgba(15,23,42,.6);z-index:300;align-items:flex-end;justify-content:center}
-.mod.sh{display:flex}
-.mod>div{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:500px;max-height:82vh;overflow-y:auto;animation:su .35s ease}
+.mod.sh{display:flex}.mod>div{background:#fff;border-radius:24px 24px 0 0;padding:24px 20px 32px;width:100%;max-width:500px;max-height:82vh;overflow-y:auto;animation:su .35s ease}
 @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .emp{text-align:center;padding:40px 20px;color:#94a3b8}.emp .ei{font-size:50px;margin-bottom:12px}
 .cb{width:52px;height:52px;border-radius:50%;border:3px solid #10b981;background:#fff;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:6px auto;font-weight:700;color:#10b981;transition:all .2s;box-shadow:0 4px 12px rgba(16,185,129,.15)}
@@ -91,7 +92,7 @@ canvas{max-height:190px}
 
 <div class="ntf" id="nt"></div>
 
-<!-- ====== LOGIN PAGE ====== -->
+<!-- LOGIN -->
 <div class="pg ac" id="lgn">
 <div class="crd" style="margin-top:20px;text-align:center">
 <div style="font-size:60px;margin-bottom:8px">📊</div>
@@ -116,15 +117,10 @@ canvas{max-height:190px}
 </div>
 </div>
 
-<!-- ====== DASHBOARD (Main Page) ====== -->
+<!-- DASHBOARD -->
 <div class="pg" id="dsh">
-<!-- Header ya dashboard -->
 <div class="hdr">
-<div class="hdr-left">
-<div class="logo-icon">📊</div>
-<h1>JoeUnTracker</h1>
-</div>
-<!-- MENU BUTTON -->
+<div class="hdr-left"><div class="logo-icon">📊</div><h1>JoeUnTracker</h1></div>
 <div class="dd-wrap">
 <button class="menu-btn" onclick="toggleDD()">•••</button>
 <div class="dd-menu" id="ddMenu">
@@ -139,16 +135,12 @@ canvas{max-height:190px}
 </div>
 </div>
 </div>
-
-<!-- Stats cards -->
 <div class="grd">
 <div class="st" onclick="nv('sls')"><div class="lbl">Mapato Leo</div><div class="v b" id="rv">0</div></div>
 <div class="st"><div class="lbl">Faida Leo</div><div class="v g" id="pf">0</div></div>
 <div class="st"><div class="lbl">Hasara Leo</div><div class="v r" id="ls">0</div></div>
 <div class="st" onclick="nv('exp')"><div class="lbl">Matumizi Leo</div><div class="v o" id="ex">0</div></div>
 </div>
-
-<!-- Menu buttons ndani ya dashboard -->
 <div class="crd">
 <div style="font-weight:700;margin-bottom:12px;font-size:14px">📋 Menyu ya Haraka</div>
 <div class="menu-grid">
@@ -160,137 +152,47 @@ canvas{max-height:190px}
 <div class="menu-item" onclick="nv('chat')"><div class="mi">💬</div><div class="mt">Mtandao</div></div>
 </div>
 </div>
-
-<!-- Muhtasari -->
-<div class="crd">
-<div style="font-weight:700;margin-bottom:10px;font-size:14px">📋 Muhtasari wa Leo</div>
-<div id="quickSummary" style="font-size:13px;color:#64748b;line-height:1.8"></div>
-</div>
+<div class="crd"><div style="font-weight:700;margin-bottom:10px;font-size:14px">📋 Muhtasari wa Leo</div><div id="quickSummary" style="font-size:13px;color:#64748b;line-height:1.8"></div></div>
 </div>
 
-<!-- ====== PRODUCTS PAGE ====== -->
-<div class="pg" id="prd">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<button class="btn bg" onclick="$('pm').classList.add('sh')">＋ Ongeza Bidhaa Mpya</button>
-<div id="pl" style="margin-top:12px"></div>
-</div>
+<!-- PRODUCTS -->
+<div class="pg" id="prd"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><button class="btn bg" onclick="$('pm').classList.add('sh')">＋ Ongeza Bidhaa Mpya</button><div id="pl" style="margin-top:12px"></div></div>
 
-<!-- ====== SALES PAGE ====== -->
-<div class="pg" id="sls">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<select id="sf" onchange="ls()" style="border-radius:50px"><option value="today">Leo</option><option value="week">Wiki Hii</option><option value="month">Mwezi Huu</option><option value="year">Mwaka Huu</option></select>
-<div class="crd" style="margin-top:10px"><div style="font-weight:700;margin-bottom:10px">📝 Gusa Kuongeza Mauzo</div><div id="qg" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div></div>
-<div class="crd"><div style="font-weight:700;margin-bottom:10px">📋 Historia</div><div id="sh"></div></div>
-</div>
+<!-- SALES -->
+<div class="pg" id="sls"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><select id="sf" onchange="ls()" style="border-radius:50px"><option value="today">Leo</option><option value="week">Wiki Hii</option><option value="month">Mwezi Huu</option><option value="year">Mwaka Huu</option></select><div class="crd" style="margin-top:10px"><div style="font-weight:700;margin-bottom:10px">📝 Gusa Kuongeza Mauzo</div><div id="qg" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center"></div></div><div class="crd"><div style="font-weight:700;margin-bottom:10px">📋 Historia</div><div id="sh"></div></div></div>
 
-<!-- ====== EXPENSES PAGE ====== -->
-<div class="pg" id="exp">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<button class="btn bg" onclick="$('em').classList.add('sh')">＋ Ongeza Matumizi</button>
-<div id="el" style="margin-top:12px"></div>
-</div>
+<!-- EXPENSES -->
+<div class="pg" id="exp"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><button class="btn bg" onclick="$('em').classList.add('sh')">＋ Ongeza Matumizi</button><div id="el" style="margin-top:12px"></div></div>
 
-<!-- ====== ANALYTICS PAGE ====== -->
-<div class="pg" id="analytics">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<h3 style="font-weight:700;margin-bottom:14px;font-size:18px">📈 Takwimu za Biashara</h3>
-<div class="crd"><div style="font-weight:700;margin-bottom:12px">📊 Mwenendo wa Wiki</div><div style="min-height:200px"><canvas id="c1"></canvas></div></div>
-<div class="crd"><div style="font-weight:700;margin-bottom:12px">🏆 Bidhaa Maarufu</div><div style="min-height:200px"><canvas id="c2"></canvas></div></div>
-</div>
+<!-- ANALYTICS -->
+<div class="pg" id="analytics"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><h3 style="font-weight:700;margin-bottom:14px;font-size:18px">📈 Takwimu za Biashara</h3><div class="crd"><div style="font-weight:700;margin-bottom:12px">📊 Mwenendo wa Wiki</div><div style="min-height:200px"><canvas id="c1"></canvas></div></div><div class="crd"><div style="font-weight:700;margin-bottom:12px">🏆 Bidhaa Maarufu</div><div style="min-height:200px"><canvas id="c2"></canvas></div></div></div>
 
-<!-- ====== REPORTS PAGE ====== -->
-<div class="pg" id="rep">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<select id="rp" onchange="lr()" style="border-radius:50px"><option value="today">Leo</option><option value="week">Wiki Hii</option><option value="month">Mwezi Huu</option><option value="year">Mwaka Huu</option></select>
-<div class="crd" style="margin-top:10px"><div id="rs"></div></div>
-<button class="btn bb" onclick="dp()">📥 Pakua Ripoti (PDF)</button>
-</div>
+<!-- REPORTS -->
+<div class="pg" id="rep"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><select id="rp" onchange="lr()" style="border-radius:50px"><option value="today">Leo</option><option value="week">Wiki Hii</option><option value="month">Mwezi Huu</option><option value="year">Mwaka Huu</option></select><div class="crd" style="margin-top:10px"><div id="rs"></div></div><button class="btn bb" onclick="dp()">📥 Pakua Ripoti (PDF)</button></div>
 
-<!-- ====== PROFILE PAGE ====== -->
-<div class="pg" id="prof">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<div class="crd" style="text-align:center">
-<div class="profile-pic" id="ppic2">M</div>
-<h2 id="pname2" style="margin-top:8px"></h2>
-<p style="color:#64748b;font-size:13px" id="pemail2"></p>
-<p style="color:#94a3b8;font-size:12px" id="pregion2"></p>
-<p style="color:#3b82f6;font-size:12px;font-weight:600" id="pbiz2"></p>
-</div>
-<div class="crd">
-<div class="section-title" style="text-align:center">Hariri Taarifa</div>
-<input id="en2" placeholder="Jina Lako"><input id="er2" placeholder="Mkoa"><input id="eb2" placeholder="Aina ya Biashara">
-<button class="btn bb" onclick="up2()">💾 Hifadhi Mabadiliko</button>
-<button class="btn br" onclick="lo()">🚪 Logout</button>
-</div>
-</div>
+<!-- PROFILE -->
+<div class="pg" id="prof"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><div class="crd" style="text-align:center"><div class="profile-pic" id="ppic2">M</div><h2 id="pname2" style="margin-top:8px"></h2><p style="color:#64748b;font-size:13px" id="pemail2"></p><p style="color:#94a3b8;font-size:12px" id="pregion2"></p><p style="color:#3b82f6;font-size:12px;font-weight:600" id="pbiz2"></p></div><div class="crd"><div class="section-title" style="text-align:center">Hariri Taarifa</div><input id="en2" placeholder="Jina Lako"><input id="er2" placeholder="Mkoa"><input id="eb2" placeholder="Aina ya Biashara"><button class="btn bb" onclick="up2()">💾 Hifadhi Mabadiliko</button><button class="btn br" onclick="lo()">🚪 Logout</button></div></div>
 
-<!-- ====== HELP PAGE ====== -->
-<div class="pg" id="help">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<div class="crd" style="text-align:center">
-<div style="font-size:50px;margin-bottom:10px">🆘</div>
-<h2 style="font-weight:700;margin-bottom:8px">Unahitaji Msaada?</h2>
-<p style="color:#64748b;font-size:13px;margin-bottom:16px">Wasiliana na developer kupitia email</p>
-<div class="help-email" onclick="window.location.href='mailto:ruchagaana@gmail.com?subject=JoeUnTracker%20Support'">📧 ruchagaana@gmail.com</div>
-<button class="btn bb" style="margin-top:12px" onclick="window.location.href='mailto:ruchagaana@gmail.com?subject=JoeUnTracker%20-%20Naomba%20Msaada'">📤 Tuma Email Sasa</button>
-</div>
-</div>
+<!-- HELP -->
+<div class="pg" id="help"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><div class="crd" style="text-align:center"><div style="font-size:50px;margin-bottom:10px">🆘</div><h2 style="font-weight:700;margin-bottom:8px">Unahitaji Msaada?</h2><p style="color:#64748b;font-size:13px;margin-bottom:16px">Wasiliana na developer kupitia email</p><div class="help-email" onclick="window.location.href='mailto:ruchagaana@gmail.com?subject=JoeUnTracker%20Support'">📧 ruchagaana@gmail.com</div><button class="btn bb" style="margin-top:12px" onclick="window.location.href='mailto:ruchagaana@gmail.com?subject=JoeUnTracker%20-%20Naomba%20Msaada'">📤 Tuma Email Sasa</button></div></div>
 
-<!-- ====== ABOUT PAGE ====== -->
-<div class="pg" id="about">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<div class="crd" style="text-align:center">
-<div style="font-size:50px;margin-bottom:10px">📊</div>
-<h2 style="font-weight:800">JoeUnTracker</h2>
-<p style="color:#64748b;font-size:12px">Version 2.0 · Made in 🇹🇿</p>
-<div style="background:#f8fafc;padding:14px;border-radius:12px;margin:12px 0;font-size:12px;color:#64748b;line-height:1.8">
-Mfumo wa kisasa wa kufuatilia maendeleo ya biashara.<br>
-Fuatilia faida, hasara, mauzo na matumizi.
-</div>
-<p style="font-size:12px;color:#64748b"><b>Developer:</b> joeruchaga<br><b>Email:</b> ruchagaana@gmail.com</p>
-</div>
-</div>
+<!-- ABOUT -->
+<div class="pg" id="about"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><div class="crd" style="text-align:center"><div style="font-size:50px;margin-bottom:10px">📊</div><h2 style="font-weight:800">JoeUnTracker</h2><p style="color:#64748b;font-size:12px">Version 2.0 · Made in 🇹🇿</p><div style="background:#f8fafc;padding:14px;border-radius:12px;margin:12px 0;font-size:12px;color:#64748b;line-height:1.8">Mfumo wa kisasa wa kufuatilia maendeleo ya biashara.<br>Fuatilia faida, hasara, mauzo na matumizi.</div><p style="font-size:12px;color:#64748b"><b>Developer:</b> joeruchaga<br><b>Email:</b> ruchagaana@gmail.com</p></div></div>
 
-<!-- ====== BUSINESS NETWORK PAGE ====== -->
-<div class="pg" id="chat">
-<button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button>
-<h3 style="font-weight:700;margin-bottom:12px;font-size:16px">👥 Wafanyabiashara Tanzania</h3>
-<div id="bizList"></div>
-</div>
+<!-- BUSINESS NETWORK -->
+<div class="pg" id="chat"><button class="back-btn" onclick="nv('dsh')">← Rudi Dashboard</button><h3 style="font-weight:700;margin-bottom:12px;font-size:16px">👥 Wafanyabiashara Tanzania</h3><div id="bizList"></div></div>
 
-<!-- ====== CHAT MODAL ====== -->
-<div class="mod" id="chatMod"><div style="display:flex;flex-direction:column;max-height:80vh">
-<div class="bar"></div>
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-<h3 id="chatName" style="font-weight:700;font-size:15px"></h3>
-<button class="btn bo btn-sm" onclick="$('chatMod').classList.remove('sh');replyTo=null;updateReplyUI();">✕</button>
-</div>
-<div id="replyBar" style="display:none"></div>
-<div id="chatMsgs" style="flex:1;overflow-y:auto;min-height:250px;max-height:400px;padding:8px 0"></div>
-<div class="chat-input-wrap"><input id="chatInp" placeholder="Andika ujumbe..." onkeypress="if(event.key==='Enter')sendChat()"><button class="btn bb btn-sm" onclick="sendChat()">➤</button></div>
-</div></div>
+<!-- CHAT MODAL -->
+<div class="mod" id="chatMod"><div style="display:flex;flex-direction:column;max-height:80vh"><div class="bar"></div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><h3 id="chatName" style="font-weight:700;font-size:15px"></h3><button class="btn bo btn-sm" onclick="$('chatMod').classList.remove('sh');replyTo=null;updateReplyUI();">✕</button></div><div id="replyBar" style="display:none"></div><div id="chatMsgs" style="flex:1;overflow-y:auto;min-height:250px;max-height:400px;padding:8px 0"></div><div class="chat-input-wrap"><input id="chatInp" placeholder="Andika ujumbe..." onkeypress="if(event.key==='Enter')sendChat()"><button class="btn bb btn-sm" onclick="sendChat()">➤</button></div></div></div>
 
-<!-- ====== PRODUCT MODAL ====== -->
-<div class="mod" id="pm"><div>
-<div class="bar"></div><h3 style="font-weight:700;margin-bottom:16px">📦 Bidhaa Mpya</h3>
-<input id="pn" placeholder="Jina la Bidhaa"><input id="pb" type="number" placeholder="Bei ya Kununua (TZS/unit)">
-<input id="ps" type="number" placeholder="Bei ya Kuuza (TZS/unit)"><input id="pk" type="number" placeholder="Idadi (Stock)">
-<div style="background:#ecfdf5;padding:12px;border-radius:12px;margin:10px 0;text-align:center;font-weight:600;font-size:13px">Faida kwa unit: <span id="pp">0 TZS</span></div>
-<button class="btn bg" onclick="sp()">💾 Hifadhi Bidhaa</button>
-<button class="btn bo" onclick="$('pm').classList.remove('sh')">Ghairi</button>
-</div></div>
+<!-- PRODUCT MODAL -->
+<div class="mod" id="pm"><div><div class="bar"></div><h3 style="font-weight:700;margin-bottom:16px">📦 Bidhaa Mpya</h3><input id="pn" placeholder="Jina la Bidhaa"><input id="pb" type="number" placeholder="Bei ya Kununua (TZS/unit)"><input id="ps" type="number" placeholder="Bei ya Kuuza (TZS/unit)"><input id="pk" type="number" placeholder="Idadi (Stock)"><div style="background:#ecfdf5;padding:12px;border-radius:12px;margin:10px 0;text-align:center;font-weight:600;font-size:13px">Faida kwa unit: <span id="pp">0 TZS</span></div><button class="btn bg" onclick="sp()">💾 Hifadhi Bidhaa</button><button class="btn bo" onclick="$('pm').classList.remove('sh')">Ghairi</button></div></div>
 
-<!-- ====== EXPENSE MODAL ====== -->
-<div class="mod" id="em"><div>
-<div class="bar"></div><h3 style="font-weight:700;margin-bottom:16px">💸 Matumizi Mapya</h3>
-<input id="ed" placeholder="Maelezo (mf: Usafiri)"><input id="ea" type="number" placeholder="Kiasi (TZS)">
-<select id="ec" style="border-radius:50px"><option>Usafiri</option><option>Kodi</option><option>Huduma</option><option>Nyingine</option></select>
-<button class="btn bg" onclick="se()">💾 Hifadhi Matumizi</button>
-<button class="btn bo" onclick="$('em').classList.remove('sh')">Ghairi</button>
-</div></div>
+<!-- EXPENSE MODAL -->
+<div class="mod" id="em"><div><div class="bar"></div><h3 style="font-weight:700;margin-bottom:16px">💸 Matumizi Mapya</h3><input id="ed" placeholder="Maelezo (mf: Usafiri)"><input id="ea" type="number" placeholder="Kiasi (TZS)"><select id="ec" style="border-radius:50px"><option>Usafiri</option><option>Kodi</option><option>Huduma</option><option>Nyingine</option></select><button class="btn bg" onclick="se()">💾 Hifadhi Matumizi</button><button class="btn bo" onclick="$('em').classList.remove('sh')">Ghairi</button></div></div>
 
 <script>
-// ====== CONFIG ======
+// CONFIG
 var EP='https://cloud.appwrite.io/v1';
 var PID='6a0aebe20009c9b90c23';
 var DB='6a0aeca0002ee00cd542';
@@ -304,10 +206,12 @@ var chatUser=null,chatTimer=null,replyTo=null;
 
 function $(id){return document.getElementById(id);}
 
-// Menu dropdown
+// PWA
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(){console.log('SW skipped');});}
+
+// Menu
 function toggleDD(){var d=$('ddMenu');d.classList.toggle('show');}
 document.addEventListener('click',function(e){if(!e.target.closest('.dd-wrap')){$('ddMenu').classList.remove('show');}});
-
 function updateReplyUI(){var rb=$('replyBar');if(replyTo){rb.style.display='block';rb.innerHTML='<div class="reply-to"><span>↩ '+replyTo.text.substring(0,25)+'...</span><button onclick="replyTo=null;updateReplyUI();">✕</button></div>';}else{rb.style.display='none';}}
 
 // Auth
@@ -318,7 +222,7 @@ async function lg(){var em=$('em').value.trim(),pw=$('pw').value;if(!em||!pw){ms
 async function rg(){var name=$('rn').value.trim(),email=$('re').value.trim(),password=$('rp').value,region=$('rr').value.trim(),business=$('rb').value.trim();if(!name||!email||!password||!region){msg('Jaza sehemu zote','red');return;}if(password.length<8){msg('Nenosiri 8+','red');return;}try{await ac.create(ID.unique(),email,password,name);await ac.createEmailSession(email,password);user=await ac.get();await db.createDocument(DB,'users',ID.unique(),{userId:user.$id,name:name,email:email,region:region,business:business||''});await lud();sa();$('am').innerHTML='<div class="alert-ok">✅ Umefanikiwa kujisajili!</div>';setTimeout(function(){$('am').innerHTML='';},3000);}catch(e){msg('Imeshindwa: '+e.message,'red');}}
 async function lo(){if(chatTimer)clearInterval(chatTimer);try{await ac.deleteSession('current');}catch(e){}user=null;userData=null;$('em').value='';$('pw').value='';$('rn').value='';$('re').value='';$('rp').value='';$('rr').value='';$('rb').value='';slg();$('ddMenu').classList.remove('show');}
 
-// User Data
+// User
 async function lud(){try{var r=await db.listDocuments(DB,'users',[Query.equal('userId',user.$id)]);if(r.documents.length>0)userData=r.documents[0];}catch(e){userData=null;}}
 function ua(){var n=userData?.name||user?.name||'M';$('ppic2').textContent=n.charAt(0).toUpperCase();$('pname2').textContent=n;$('pemail2').textContent=user?.email||'';$('pregion2').textContent='📍 '+(userData?.region||'--');$('pbiz2').textContent='🏪 '+(userData?.business||'--');$('en2').value=n;$('er2').value=userData?.region||'';$('eb2').value=userData?.business||'';}
 async function up2(){var n=$('en2').value.trim(),r=$('er2').value.trim(),b=$('eb2').value.trim();if(!n){alert('Weka jina');return;}try{await ac.updateName(n);if(userData)await db.updateDocument(DB,'users',userData.$id,{name:n,region:r,business:b||''});await lud();ua();alert('✅ Imefanikiwa!');}catch(e){alert('Imeshindwa');}}
@@ -366,7 +270,6 @@ function oc(uid,nm,bz){chatUser=uid;$('chatName').textContent=nm+' · '+bz;$('ch
 async function lcm(){if(!chatUser)return;try{var r=await db.listDocuments(DB,'messages',[Query.or([Query.and([Query.equal('from',user.$id),Query.equal('to',chatUser)]),Query.and([Query.equal('from',chatUser),Query.equal('to',user.$id)])]),Query.orderAsc('$createdAt'),Query.limit(100)]);var m=r.documents,c=$('chatMsgs');c.innerHTML=m.map(function(x){return'<div class="chat-msg '+(x.from===user.$id?'me':'other')+'"><div>'+x.text+'</div><div class="chat-time">'+new Date(x.$createdAt).toLocaleTimeString('sw',{hour:'2-digit',minute:'2-digit'})+'</div><div class="reply-btn" onclick="replyTo={text:\''+x.text.replace(/'/g,"\\'")+'\'};updateReplyUI();$(\'chatInp\').focus();">↩ Reply</div></div>';}).join('');c.scrollTop=c.scrollHeight;}catch(e){}}
 async function sendChat(){var t=$('chatInp').value.trim();if(!t||!chatUser)return;var msgText=t;if(replyTo){msgText='↩ '+msgText;}try{await db.createDocument(DB,'messages',ID.unique(),{from:user.$id,to:chatUser,text:msgText});$('chatInp').value='';replyTo=null;updateReplyUI();await lcm();}catch(e){alert('Imeshindwa');}}
 
-// Start
 ca();
 </script>
 </body>
